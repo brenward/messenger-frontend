@@ -1,0 +1,17 @@
+#user-containter{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    background-color: #F6F3C2;
+    color: #E37434;
+    margin: 1rem;
+    border-radius: 5px;
+    padding: 1rem;
+    column-gap: 5rem;
+}
+
+.btn-primary{
+    background-color: #4B9DA9;
+    color: #F6F3C2;
+}
+

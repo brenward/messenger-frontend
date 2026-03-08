@@ -1,0 +1,29 @@
+h1{
+    text-align: center;
+    background-color: #F6F3C2;
+    color: #E37434;
+    margin: 1rem;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+#container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #bff0e7;
+}
+
+#chat-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+app-chatlistcomponent{
+    width: 30%;
+}
+
+app-chatcomponent{
+    width: 70%;
+}
