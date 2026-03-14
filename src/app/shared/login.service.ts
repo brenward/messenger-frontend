@@ -1,17 +1,24 @@
 import { Injectable } from "@angular/core";
 import { User } from "./user.model";
 import { HttpClient } from "@angular/common/http";
+import { Subject } from "rxjs";
 
 @Injectable()
 export class LoginService{
     currentUser:User | undefined;
+    userUpdate: Subject<string> = new Subject<string>();
 
     constructor(private http:HttpClient){}
 
     setUser(username:string){
         this.lookupUserOnService(username).subscribe({
-            next: (response) => {this.setCurrentUser(username)},
-            error: (error) => { console.log("error")}
+            next: (response) => {
+                this.setCurrentUser(username);
+                this.userUpdate.next(username);
+            },
+            error: (error) => { 
+                this.userUpdate.next("Error");
+                console.log("error")}
         });        
     }
 
@@ -24,7 +31,7 @@ export class LoginService{
     }
 
     lookupUserOnService(username:string){
-        return this.http.get("http://localhost:8181/chats/" + username);       
+        return this.http.get("http://localhost:8181/user/" + username);       
     }
 
 

@@ -1,29 +1,45 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { NgIf } from "../../../node_modules/@angular/common/types/_common_module-chunk";
 import { LoginService } from '../shared/login.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-usercomponent',
   imports: [],
   templateUrl: './usercomponent.html',
   styleUrl: './usercomponent.css',
-  providers: [LoginService]
+  providers: [LoginService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Usercomponent {
   username:string = "";
-  userSet:boolean = false; 
+  userSet:boolean = false;
+  errorMessage:string = "";
 
-  constructor(private loginService:LoginService){}
+  nameChangeSubscription: Subscription;
+  readonly changeDetector = inject(ChangeDetectorRef);
+
+  constructor(private loginService:LoginService){
+    this.nameChangeSubscription = loginService.userUpdate.subscribe((value) => {
+      if(value === "Error"){
+        this.errorMessage = "User not found.";
+        this.username = "";
+        this.userSet = false;
+      }else{
+        this.username = value;
+        this.userSet = true;
+        this.errorMessage = "";
+      }
+      this.changeDetector.detectChanges();
+    })
+  }
 
   onUserNameEntered(nameInput:HTMLInputElement){
-    this.loginService.setUser(this.username);
-    let retrievedUser = this.loginService.getUser();
+    this.loginService.setUser(nameInput.value);
 
-    if(retrievedUser != undefined){
-      this.username = nameInput.value;
-      this.userSet = true;
-    }else{
-      console.log("User undefined");
-    }
+  }
+
+  ngOnDestroy(){
+    this.nameChangeSubscription.unsubscribe;
   }
 }
