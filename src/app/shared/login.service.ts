@@ -13,7 +13,7 @@ export class LoginService{
     setUser(username:string){
         this.lookupUserOnService(username).subscribe({
             next: (response) => {
-                this.setCurrentUser(username);
+                this.setCurrentUser(response.name, response.id);
                 this.userUpdate.next(username);
             },
             error: (error) => { 
@@ -22,8 +22,8 @@ export class LoginService{
         });        
     }
 
-    setCurrentUser(username:string){
-        this.currentUser = new User(username, "");
+    setCurrentUser(username:string, id:string){
+        this.currentUser = new User(username, id);
     }
 
     getUser(){
@@ -31,7 +31,7 @@ export class LoginService{
     }
 
     lookupUserOnService(username:string){
-        return this.http.get("http://localhost:8181/user/" + username);       
+        return this.http.get<User>("http://localhost:8181/user/" + username);       
     }
 
 

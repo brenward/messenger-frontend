@@ -30,13 +30,13 @@ export class Usercomponent {
         this.userSet = true;
         this.errorMessage = "";
       }
+      console.log(this.loginService.getUser());
       this.changeDetector.detectChanges();
     })
   }
 
   onUserNameEntered(nameInput:HTMLInputElement){
     this.loginService.setUser(nameInput.value);
-
   }
 
   ngOnDestroy(){
