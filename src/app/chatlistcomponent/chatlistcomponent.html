@@ -1,12 +1,14 @@
 <div id="chatlist-container">
     <h3>Select Existing Chat</h3>
     <div id="chats-list">
-        <p>chat 1</p>
-        <p>chat 2</p>
-        <p>chat 3</p>
+        @for(chat of chats; track chat.id){
+            <p>{{chat.chatName}}</p>
+        }@empty {
+            <p>No chats available</p>
+        }
     </div>
     <div id="add-chat">
         <input type="text">
-        <button class="btn btn-primary">Add</button>
+        <button class="btn btn-primary" (click)="onAdd()">Add</button>
     </div>
 </div>

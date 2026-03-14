@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
-import { NgIf } from "../../../node_modules/@angular/common/types/_common_module-chunk";
 import { LoginService } from '../shared/login.service';
 import { Subscription } from 'rxjs';
 
@@ -8,7 +7,7 @@ import { Subscription } from 'rxjs';
   imports: [],
   templateUrl: './usercomponent.html',
   styleUrl: './usercomponent.css',
-  providers: [LoginService],
+  providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Usercomponent {
@@ -30,7 +29,6 @@ export class Usercomponent {
         this.userSet = true;
         this.errorMessage = "";
       }
-      console.log(this.loginService.getUser());
       this.changeDetector.detectChanges();
     })
   }

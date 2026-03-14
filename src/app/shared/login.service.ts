@@ -7,6 +7,7 @@ import { Subject } from "rxjs";
 export class LoginService{
     currentUser:User | undefined;
     userUpdate: Subject<string> = new Subject<string>();
+    chatListUpdate: Subject<string> = new Subject<string>();
 
     constructor(private http:HttpClient){}
 
@@ -15,6 +16,7 @@ export class LoginService{
             next: (response) => {
                 this.setCurrentUser(response.name, response.id);
                 this.userUpdate.next(username);
+                this.chatListUpdate.next(username);
             },
             error: (error) => { 
                 this.userUpdate.next("Error");

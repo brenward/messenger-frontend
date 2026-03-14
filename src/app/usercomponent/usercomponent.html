@@ -4,8 +4,8 @@
     }
     @else {
         <h2>Enter Username:</h2>
-        <input type="text" #username>
-        <button class="btn btn-primary" (click)="onUserNameEntered(username)">Login</button>
+        <input type="text" #usernameInput>
+        <button class="btn btn-primary" (click)="onUserNameEntered(usernameInput)">Login</button>
         <p class="error-message">{{errorMessage}}</p>
     }
     
