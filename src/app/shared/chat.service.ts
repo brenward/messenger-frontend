@@ -6,8 +6,10 @@ import { Subject } from "rxjs";
 @Injectable()
 export class ChatService{
     private chats:Chat[] = [];
+    private currentChat:Chat | undefined;
 
     chatsRefreshed: Subject<void> = new Subject();
+    currentChatRefreshed: Subject<Chat> = new Subject();
 
     constructor(private http:HttpClient){}
 
@@ -30,8 +32,13 @@ export class ChatService{
         return this.chats;
     }
 
-    getChat(){
+    setCurrentChat(chat:Chat){
+        this.currentChat = chat;
+        this.currentChatRefreshed.next(chat);
+    }
 
+    getChat(){
+        return this.currentChat;
     }
 
     addChat(){

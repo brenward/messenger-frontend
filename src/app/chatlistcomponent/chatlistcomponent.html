@@ -2,7 +2,7 @@
     <h3>Select Existing Chat</h3>
     <div id="chats-list">
         @for(chat of chats; track chat.id){
-            <p>{{chat.chatName}}</p>
+            <p (click)="onSelectChat(chat)">{{chat.chatName}}</p>
         }@empty {
             <p>No chats available</p>
         }

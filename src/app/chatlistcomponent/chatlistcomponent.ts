@@ -35,6 +35,10 @@ export class Chatlistcomponent {
     
   }
 
+  onSelectChat(chat:Chat){
+    this.chatService.setCurrentChat(chat)
+  }
+
   ngOnDestroy(){
     this.nameChangeSubscription.unsubscribe;
     this.chatsRefreshedSubscription.unsubscribe;
