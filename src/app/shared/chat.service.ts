@@ -13,7 +13,9 @@ export class ChatService{
     chatsRefreshed: Subject<void> = new Subject();
     currentChatRefreshed: Subject<Chat> = new Subject();
 
-    constructor(private http:HttpClient, private loginService:LoginService){}
+    constructor(private http:HttpClient, private loginService:LoginService){
+        this.pollForChatUpdates()
+    }
 
     refreshChatListForUser(username:string){
         console.log("going to update list");
@@ -52,9 +54,9 @@ export class ChatService{
         this.http.get<Chat>("http://localhost:8181/chats/chat/" + chatId).subscribe({
             next: (response) => {
                 console.log("get chats: ", response);
-                Object.assign(newMessage, {username: this.loginService.getUser()?.username});
+                /*Object.assign(newMessage, {username: this.loginService.getUser()?.username});
                 Object.assign(newMessage, {seqeuence: response.messages.length + 1});
-                response.messages.push(newMessage as Message);
+                response.messages.push(newMessage as Message);*/
 
                 this.chats.forEach((chat, index) => {
                     if(chat.id === chatId){
@@ -62,7 +64,6 @@ export class ChatService{
                     }
                 });
                 console.log("Chat refreshed: ", response);
-
 
                 this.setCurrentChat(response);
             },
@@ -86,4 +87,29 @@ export class ChatService{
       });
     
     }
+
+    pollForChatUpdates(){       
+        setInterval(() => {
+            if(this.currentChat){
+                const url = "http://localhost:8181/chats/chat/refreshed/" 
+                    + this.currentChat.id 
+                    + "?sequence=" 
+                    + this.currentChat.messages.length;
+                this.http.get<boolean>(url).subscribe({
+                    next: (response) => { 
+                        if(response){
+                            console.log("Updates found for chat: ", this.currentChat?.chatName);
+                            this.refreshChat(this.currentChat!.id, {});
+                        }else{
+                            console.log("No updates for chat: ", this.currentChat?.chatName);
+                        }
+                    },
+                    error: (error) => { console.log(error)}        
+                });
+                console.log("Polling for updates for chat: ", this.currentChat.id);
+            }
+        }, 5000);
+    }
+
+
 }

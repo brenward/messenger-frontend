@@ -1,5 +1,9 @@
 <div id="chat-container">
     <h3>Current Chat: {{ currentChat?.chatName }}</h3>
+    <div id="write-chat">
+        <input id="new-chat" type="text" #messageInput placeholder="Type your message here..." />
+        <button class="btn btn-primary" (click)="postMessage(messageInput)">Post</button>
+    </div>
     <div id="chat-area">
         @for (message of sortedMessages; track $index) {
             @if (message.username == currentUsername) {
@@ -10,9 +14,5 @@
         }@empty {
             <p>No messages yet.</p>
         }
-    </div>
-    <div id="write-chat">
-        <input id="new-chat" type="text" #messageInput placeholder="Type your message here..." />
-        <button class="btn btn-primary" (click)="postMessage(messageInput)">Post</button>
-    </div>
+    </div>    
 </div>

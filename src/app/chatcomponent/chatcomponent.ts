@@ -32,7 +32,7 @@ export class Chatcomponent {
   }
 
   get sortedMessages() {
-    return this.currentChat?.messages?.slice().sort((a, b) => a.sequence - b.sequence) || [];
+    return this.currentChat?.messages?.slice().sort((a, b) => b.sequence - a.sequence) || [];
   }
 
   get currentUsername() {
