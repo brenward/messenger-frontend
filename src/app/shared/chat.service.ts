@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { Chat } from "./chat.model";
 import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
+import { Message } from "./message.model";
+import { LoginService } from "./login.service";
 
 @Injectable()
 export class ChatService{
@@ -11,7 +13,7 @@ export class ChatService{
     chatsRefreshed: Subject<void> = new Subject();
     currentChatRefreshed: Subject<Chat> = new Subject();
 
-    constructor(private http:HttpClient){}
+    constructor(private http:HttpClient, private loginService:LoginService){}
 
     refreshChatListForUser(username:string){
         console.log("going to update list");
@@ -43,6 +45,44 @@ export class ChatService{
 
     addChat(){
 
+    }
+
+    refreshChat(chatId:string, newMessage:{}){
+        //Get chat from server and update current chat
+        this.http.get<Chat>("http://localhost:8181/chats/chat/" + chatId).subscribe({
+            next: (response) => {
+                console.log("get chats: ", response);
+                response.messages.push(newMessage as Message);
+
+                this.chats.forEach((chat, index) => {
+                    if(chat.id === chatId){
+                        this.chats[index] = response;
+                    }
+                });
+                console.log("Chat refreshed: ", response);
+
+
+                this.setCurrentChat(response);
+            },
+            error: (error) => { console.log(error)}        
+      });
+    }
+
+    postMessageToChat(chat:Chat, message:string){
+
+        const newMessage = {
+            chatId: chat.id,
+            message: message,
+            userId: this.loginService.getUser()?.id
+        };      
+
+        this.http.post("http://localhost:8181/message", newMessage).subscribe({
+            next: (response) => { 
+                this.refreshChat(chat.id, newMessage);
+            },
+            error: (error) => { console.log(error)}        
+      });
+    
     }
 
 }
