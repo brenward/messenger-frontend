@@ -24,3 +24,11 @@
 #new-chat{
     width: 80%;
 }
+
+.align-left {
+    text-align: left;
+}  
+
+.align-right {
+    text-align: right;
+}

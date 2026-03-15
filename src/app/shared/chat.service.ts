@@ -52,6 +52,8 @@ export class ChatService{
         this.http.get<Chat>("http://localhost:8181/chats/chat/" + chatId).subscribe({
             next: (response) => {
                 console.log("get chats: ", response);
+                Object.assign(newMessage, {username: this.loginService.getUser()?.username});
+                Object.assign(newMessage, {seqeuence: response.messages.length + 1});
                 response.messages.push(newMessage as Message);
 
                 this.chats.forEach((chat, index) => {
@@ -84,5 +86,4 @@ export class ChatService{
       });
     
     }
-
 }

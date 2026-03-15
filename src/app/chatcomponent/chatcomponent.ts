@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@
 import { ChatService } from '../shared/chat.service';
 import { Chat } from '../shared/chat.model';
 import { Subscription } from 'rxjs';
+import { LoginService } from '../shared/login.service';
 
 @Component({
   selector: 'app-chatcomponent',
@@ -16,7 +17,7 @@ export class Chatcomponent {
 
   readonly changeDetector = inject(ChangeDetectorRef);
   
-  constructor(private chatService:ChatService){
+  constructor(private chatService:ChatService, private loginService:LoginService){
     this.chatSelectedSubscription = chatService.currentChatRefreshed.subscribe((chat) => {
       this.currentChat = chat;
       console.log("Current chat updated: ", chat);
@@ -28,6 +29,14 @@ export class Chatcomponent {
     console.log("Posting message: " + messageInput.value);
     this.chatService.postMessageToChat(this.currentChat!, messageInput.value);
     messageInput.value = "";
+  }
+
+  get sortedMessages() {
+    return this.currentChat?.messages?.slice().sort((a, b) => a.sequence - b.sequence) || [];
+  }
+
+  get currentUsername() {
+    return this.loginService.getUser()?.username || "Unknown User";
   }
 
   ngOnDestroy(){

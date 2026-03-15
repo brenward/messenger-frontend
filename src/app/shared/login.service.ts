@@ -14,7 +14,7 @@ export class LoginService{
     setUser(username:string){
         this.lookupUserOnService(username).subscribe({
             next: (response) => {
-                this.setCurrentUser(response.name, response.id);
+                this.setCurrentUser(response.username, response.id);
                 this.userUpdate.next(username);
                 this.chatListUpdate.next(username);
             },
@@ -25,6 +25,7 @@ export class LoginService{
     }
 
     setCurrentUser(username:string, id:string){
+        console.log("Setting current user: ", username, id);
         this.currentUser = new User(username, id);
     }
 

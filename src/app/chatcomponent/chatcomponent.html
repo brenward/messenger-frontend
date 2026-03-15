@@ -1,8 +1,12 @@
 <div id="chat-container">
     <h3>Current Chat: {{ currentChat?.chatName }}</h3>
     <div id="chat-area">
-        @for (message of currentChat?.messages; track $index) {
-            <p>{{ message.message }}</p>
+        @for (message of sortedMessages; track $index) {
+            @if (message.username == currentUsername) {
+                <p class="align-left"><strong>{{message.username}}:</strong> {{ message.message }}</p>
+            } @else {
+                <p class="align-right">{{message.username}}: {{ message.message }}</p>
+            }
         }@empty {
             <p>No messages yet.</p>
         }
